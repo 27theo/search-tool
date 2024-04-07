@@ -7,7 +7,6 @@ Theo Addis <sc21tcda@leeds.ac.uk>
 from requests import Session
 from bs4 import BeautifulSoup
 from collections import defaultdict
-from string import punctuation
 import re
 import json
 
