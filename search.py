@@ -9,9 +9,10 @@ from bs4 import BeautifulSoup
 from collections import defaultdict
 import re
 import json
+import time
 
 URL = "https://quotes.toscrape.com"
-RATE_LIMIT = 0 # TODO: This must be at least 6 in production
+RATE_LIMIT = 6
 DEBUG = True
 INDEX: defaultdict = defaultdict(list)
 INDEX_FILE = "index.json"
@@ -24,6 +25,7 @@ def build() -> None:
     queued_pages = [current_page]
     seen_pages = []
     session = Session()
+    last_request_at = 0
     debug("[ ] Starting site-wide scrape")
 
     # Scrape the site, building the inverted index
@@ -35,12 +37,16 @@ def build() -> None:
 
         # Fetch the current page with a request
         try:
+            # We observe a rate limit before requesting
+            while time.time() - last_request_at < RATE_LIMIT:
+                time.sleep(0.1)
+            last_request_at = time.time()
             response = session.get(current_page)
+            if response.status_code != 200:
+                debug(f"[W] Got {response.status_code} code from {current_page}")
+                continue
         except Exception as e:
             debug(f"[E] Got {e} attempting to retrieve {current_page}")
-            continue
-        if response.status_code != 200:
-            debug(f"[W] Got {response.status_code} code from {current_page}")
             continue
 
         # Fetch the next link if there is one
