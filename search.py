@@ -111,7 +111,9 @@ def main() -> None:
     while True:
         try:
             command = input("> ").lower().split()
-            if command[0] == "help":
+            if len(command) == 0:
+                continue
+            elif command[0] == "help":
                 help()
             elif command[0] == "build":
                 build()
