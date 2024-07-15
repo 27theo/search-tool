@@ -5,9 +5,6 @@ UoL. The software product consists of a primitive scraping tool that builds an
 index of a simple site. The index can then be searched through, results sorted
 by a simple ranking algorithm.
 
-A formatted copy of the following report is available at
-[REPORT.pdf](REPORT.pdf).
-
 ## Report
 
 ### 1. The crawler
